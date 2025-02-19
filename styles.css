@@ -100,3 +100,18 @@ body {
         max-height: 150px; /* For smaller screens, adjust as necessary */
     }
 }
+
+#pauseResumeBtn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #3f51b5; /* Blue for pause/resume */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#pauseResumeBtn:hover {
+    background-color: #303f9f; /* Darker blue on hover */
+}

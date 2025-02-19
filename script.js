@@ -4,6 +4,9 @@ const progressBtn = document.getElementById('progressBtn');
 const resetBtn = document.getElementById('resetBtn');
 const mapImage = document.getElementById('mapImage');
 const progressMarker = document.getElementById('progressMarker');
+const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+
+let isPaused = false;
 
 function updateJourney() {
     const imageContainer = document.getElementById('imageContainer');
@@ -58,6 +61,7 @@ function updateJourney() {
         document.getElementById('endSound').play();
         showMessage("Congratulations! You've completed your journey!");
         resetBtn.style.display = 'block'; // Show reset button when journey is complete
+        pauseResumeBtn.style.display = 'none'; // Hide pause/resume button
         progressMarker.style.left = `${mapImage.offsetWidth}px`; // Move marker to the end of the map
     }
 }
@@ -92,18 +96,31 @@ function resetJourney() {
     progressBtn.textContent = "Make Progress";
     progressBtn.disabled = false;
     resetBtn.style.display = 'none'; // Hide reset button
+    pauseResumeBtn.style.display = 'none'; // Hide pause/resume button
+    pauseResumeBtn.textContent = "Pause"; // Reset button text
+    isPaused = false;
     document.getElementById('imageContainer').querySelector('img').style.opacity = '1'; // Ensure the first image is visible
     document.getElementById('startSound').play(); // Play start sound again
+    progressMarker.style.left = '0'; // Reset marker position
 }
 
 // Function to start the timer
 function startTimer() {
     document.getElementById('startSound').play();
     timer = setInterval(() => {
-        journeyProgress += 1; // Increment progress by 1% every second
-        if(journeyProgress > 100) journeyProgress = 100; // Cap at 100%
-        updateJourney();
+        if (!isPaused) {
+            journeyProgress += 1; // Increment progress by 1% every second
+            if(journeyProgress > 100) journeyProgress = 100; // Cap at 100%
+            updateJourney();
+        }
     }, 1000); // 1000ms = 1 second
+    pauseResumeBtn.style.display = 'block'; // Show pause/resume button
+}
+
+// Function to toggle pause/resume
+function togglePauseResume() {
+    isPaused = !isPaused;
+    pauseResumeBtn.textContent = isPaused ? "Resume" : "Pause";
 }
 
 progressBtn.addEventListener('click', () => {
@@ -112,5 +129,7 @@ progressBtn.addEventListener('click', () => {
 });
 
 resetBtn.addEventListener('click', resetJourney);
+
+pauseResumeBtn.addEventListener('click', togglePauseResume);
 
 // No need for an initial call; the journey starts when the user clicks the button
