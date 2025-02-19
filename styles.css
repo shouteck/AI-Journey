@@ -14,10 +14,41 @@ body {
     background-color: white;
     border: 1px solid #ccc;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
+    position: relative; /* Necessary for absolute positioning of children */
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+#imageContainer {
+    position: relative;
+    width: 100%;
+    height: 80%; /* Assuming 80% for image, 20% for text */
+}
+
+#imageContainer img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Maintain aspect ratio */
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#imageContainer .fade-out {
+    opacity: 0;
+}
+
+#journeyView p {
+    margin: 0;
+    width: 100%; /* Ensure text spans full width */
+    position: absolute;
+    bottom: 0; /* Text at the bottom */
 }
 
 #progressBtn {
