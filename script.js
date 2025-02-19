@@ -1,15 +1,26 @@
 let journeyProgress = 0; // Percentage of journey completed
 
-// Function to update the journey view
 function updateJourney() {
-    // Placeholder for where we would update the UI with journey progress
-    document.getElementById('journeyView').innerHTML = `<p>Your journey progress: ${journeyProgress}%</p>`;
+    if(journeyProgress < 100) {
+        // Show image for progress less than 100%
+        let imageNumber = Math.floor(journeyProgress / 10) + 1;
+        document.getElementById('journeyView').innerHTML = `
+            <img src="placeholders/journey_${imageNumber}.jpg" alt="Journey at ${journeyProgress}%">
+            <p>Your journey progress: ${journeyProgress}%</p>
+        `;
+    } else {
+        // No image at 100%, just show the progress
+        document.getElementById('journeyView').innerHTML = `
+            <p>Your journey progress: ${journeyProgress}%</p>
+        `;
+    }
 }
 
-// Event listener for the progress button
 document.getElementById('progressBtn').addEventListener('click', () => {
-    // Simulate progress by increasing journeyProgress
     journeyProgress += 10; 
-    if(journeyProgress > 100) journeyProgress = 100; // Cap at 100%
-    updateJourney(); // Update the UI
+    if(journeyProgress > 100) journeyProgress = 100;
+    updateJourney();
 });
+
+// Initial call to set the state when the page loads
+updateJourney();
