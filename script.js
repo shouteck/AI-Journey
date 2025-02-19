@@ -1,10 +1,11 @@
 let journeyProgress = 0; // Percentage of journey completed
 let timer; // Variable to hold timer reference
+const progressBtn = document.getElementById('progressBtn');
+const resetBtn = document.getElementById('resetBtn');
 
 function updateJourney() {
     const imageContainer = document.getElementById('imageContainer');
     const progressText = document.getElementById('journeyView').querySelector('p');
-    const progressBtn = document.getElementById('progressBtn');
     
     if(journeyProgress < 100) {
         let imageNumber = Math.floor(journeyProgress / 10) + 1;
@@ -49,6 +50,7 @@ function updateJourney() {
         progressBtn.disabled = true;
         document.getElementById('endSound').play();
         showMessage("Congratulations! You've completed your journey!");
+        resetBtn.style.display = 'block'; // Show reset button when journey is complete
     }
 }
 
@@ -74,6 +76,18 @@ function showMessage(message) {
     }, 3000);
 }
 
+// Function to reset the journey
+function resetJourney() {
+    journeyProgress = 0;
+    clearInterval(timer);
+    updateJourney(); // Reset the visual state
+    progressBtn.textContent = "Make Progress";
+    progressBtn.disabled = false;
+    resetBtn.style.display = 'none'; // Hide reset button
+    document.getElementById('imageContainer').querySelector('img').style.opacity = '1'; // Ensure the first image is visible
+    document.getElementById('startSound').play(); // Play start sound again
+}
+
 // Function to start the timer
 function startTimer() {
     document.getElementById('startSound').play();
@@ -84,9 +98,11 @@ function startTimer() {
     }, 1000); // 1000ms = 1 second
 }
 
-document.getElementById('progressBtn').addEventListener('click', () => {
+progressBtn.addEventListener('click', () => {
     startTimer();
-    document.getElementById('progressBtn').disabled = true;
+    progressBtn.disabled = true;
 });
+
+resetBtn.addEventListener('click', resetJourney);
 
 // No need for an initial call; the journey starts when the user clicks the button
