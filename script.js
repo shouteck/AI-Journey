@@ -2,6 +2,8 @@ let journeyProgress = 0; // Percentage of journey completed
 let timer; // Variable to hold timer reference
 const progressBtn = document.getElementById('progressBtn');
 const resetBtn = document.getElementById('resetBtn');
+const mapImage = document.getElementById('mapImage');
+const progressMarker = document.getElementById('progressMarker');
 
 function updateJourney() {
     const imageContainer = document.getElementById('imageContainer');
@@ -31,6 +33,11 @@ function updateJourney() {
 
         progressText.textContent = `Your journey progress: ${journeyProgress}%`;
 
+        // Update map progress marker
+        const mapWidth = mapImage.offsetWidth;
+        const markerPosition = Math.floor((mapWidth * journeyProgress) / 100);
+        progressMarker.style.left = `${markerPosition}px`;
+
         // Play stage sound every 10%
         if(journeyProgress % 10 === 0) {
             document.getElementById('stageSound').play();
@@ -51,6 +58,7 @@ function updateJourney() {
         document.getElementById('endSound').play();
         showMessage("Congratulations! You've completed your journey!");
         resetBtn.style.display = 'block'; // Show reset button when journey is complete
+        progressMarker.style.left = `${mapImage.offsetWidth}px`; // Move marker to the end of the map
     }
 }
 
