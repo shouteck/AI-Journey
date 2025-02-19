@@ -1,53 +1,59 @@
 let journeyProgress = 0; // Percentage of journey completed
+let timer; // Variable to hold timer reference
 
 function updateJourney() {
-    const imageContainer = document.getElementById('imageContainer'); // Target the container, not journeyView
+    const imageContainer = document.getElementById('imageContainer');
     
     if(journeyProgress < 100) {
         let imageNumber = Math.floor(journeyProgress / 10) + 1;
         
-        // Create a new img element for the new image
         const newImg = document.createElement('img');
         newImg.src = `placeholders/journey_${imageNumber}.jpg`;
         newImg.alt = `Journey at ${journeyProgress}%`;
-        newImg.style.opacity = '0'; // Start with opacity 0
+        newImg.style.opacity = '0';
         
-        // Fade out the old image, if any
         const oldImg = imageContainer.querySelector('img');
         if(oldImg) {
             oldImg.classList.add('fade-out');
         }
 
-        // Add the new image
         imageContainer.appendChild(newImg);
         
-        // After a short delay, remove the old image and show the new one
         setTimeout(() => {
             if(oldImg) {
                 imageContainer.removeChild(oldImg);
             }
-            newImg.style.opacity = '1'; // Fade in the new image
-        }, 500); // Match this with the transition duration in CSS
+            newImg.style.opacity = '1';
+        }, 500);
 
-        // Update text
         document.getElementById('journeyView').querySelector('p').textContent = `Your journey progress: ${journeyProgress}%`;
     } else {
-        // Remove the image at 100%, just show the progress
         const oldImg = imageContainer.querySelector('img');
         if(oldImg) {
             oldImg.classList.add('fade-out');
             setTimeout(() => {
                 imageContainer.removeChild(oldImg);
-            }, 500); // Remove after fade-out
+            }, 500);
         }
         document.getElementById('journeyView').querySelector('p').textContent = `Your journey progress: ${journeyProgress}%`;
+        clearInterval(timer); // Stop the timer when journey is complete
+        document.getElementById('progressBtn').textContent = "Journey Complete!";
+        document.getElementById('progressBtn').disabled = true;
     }
 }
 
+// Function to start the timer
+function startTimer() {
+    timer = setInterval(() => {
+        journeyProgress += 1; // Increment progress by 1% every second
+        if(journeyProgress > 100) journeyProgress = 100; // Cap at 100%
+        updateJourney();
+    }, 1000); // 1000ms = 1 second
+}
+
 document.getElementById('progressBtn').addEventListener('click', () => {
-    journeyProgress += 10; 
-    if(journeyProgress > 100) journeyProgress = 100;
-    updateJourney();
+    startTimer();
+    document.getElementById('progressBtn').disabled = true; // Disable button after starting timer
 });
 
-// No initial call needed; the initial state is set in HTML
+// No need for an initial call; the journey starts when the user clicks the button
